@@ -29,12 +29,12 @@ class ViewController: UIViewController {
 //
 //        //3rd step:- write into the context
 //        let newUser = NSEntityDescription.insertNewObject(forEntityName: "User", into: context)
-//        newUser.setValue("Kamal", forKey: "name")
+//        newUser.setValue("Ali", forKey: "name")
 //        newUser.setValue(4168412862, forKey: "phone")
-//        newUser.setValue("kk@gmail", forKey: "email")
-//        newUser.setValue(25, forKey: "Age")
-//
-//        // 4th step:- save context
+//        newUser.setValue("Ali@gmail.com", forKey: "email")
+//        newUser.setValue(15, forKey: "Age")
+
+        // 4th step:- save context
 //
 //        do {
 //           try  context.save()
@@ -46,20 +46,56 @@ class ViewController: UIViewController {
 //            print(error)
 //
 //        }
-//
+
     // fetch request
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
         
+     request.predicate = NSPredicate(format: "name=%@","Ali")
+  // request.predicate = NSPredicate(format: "name=%@","@gmail.com")
+        
+        request.returnsObjectsAsFaults = false
         // let result
         do{
             let results = try context.fetch(request)
             if results.count > 0
             {
                 for result in results as! [NSManagedObject]{
-                    if let name = result.value(forKey: "name"){
-                          print(name)
+//                   /*if let name = result.value(forKey: "name")
+//                    {
+//                          print(name)
+//                    }
+//                      */
+//                    if let email = result.value(forKey: "email")
+//                    {
+//                        print(email)
+//
+//                        // update email address to "mo@EXAMPLE.CA"
+//                        let email = email as! String
+//                        //update core data
+//                        result.setValue(email.dropLast(2) + "a", forKey: "email")
+//                        do{
+//                            print(result, "is saved")
+//                        }
+//                        catch{
+//                            print (error)
+//                        }
+//                        print(email)
+//                    }
+                    //Delete the user kamal
+                    if let name = result.value(forKey: "name") as? String
+                    {
+                        context.delete(result)
+                        
+                            do {
+                                try context.save()
+                            }
+                        catch
+                        {
+                            print(error)
+                        }
+                        print(name)
+                        
                     }
-                      
                 }
             }
             }
